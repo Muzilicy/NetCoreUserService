@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using NetCoreUserService;
 using Newtonsoft.Json;
 using ServiceReference1;
 using ServiceReference2;
@@ -25,6 +26,14 @@ Console.WriteLine("Hello, World!");
 //Console.WriteLine("resultScada:" + resultScadaStr); 
 #endregion
 
+
+HttpPostWebService postWebService = new HttpPostWebService();
+
+string url = "http://www.webxml.com.cn/WebServices/WeatherWebService.asmx";
+string method = "getWeatherbyCityName";
+var result1 = postWebService.PostService(url, method, "九江");
+
+Console.WriteLine(JsonConvert.SerializeObject(result1));
 
 Weather.WeatherWebServiceSoapClient webServiceSoapClient = new Weather.WeatherWebServiceSoapClient(EndpointConfiguration.WeatherWebServiceSoap);
 
