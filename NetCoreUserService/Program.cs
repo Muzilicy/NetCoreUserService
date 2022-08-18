@@ -2,22 +2,59 @@
 using Newtonsoft.Json;
 using ServiceReference1;
 using ServiceReference2;
+using static Weather.WeatherWebServiceSoapClient;
 
 Console.WriteLine("Hello, World!");
 
-MesOperateClient client = new MesOperateClient();
-var response = client.GetInfoAsync("123");
-var result = response.Result;
-var resultStr = JsonConvert.SerializeObject(result);
+#region 测试代码
+//MesOperateClient client = new MesOperateClient();
+//var response = client.GetInfoAsync("123");
+//var result = response.Result;
+//var resultStr = JsonConvert.SerializeObject(result);
 
-Console.WriteLine("result:" + resultStr);
+//Console.WriteLine("result:" + resultStr);
 
-ScadaOperateClient clientScada = new ScadaOperateClient();
+//ScadaOperateClient clientScada = new ScadaOperateClient();
 
-var responseScada = clientScada.GetInfoAsync("123");
+//var responseScada = clientScada.GetInfoAsync("123");
 
-var resultScada = responseScada.Result;
+//var resultScada = responseScada.Result;
 
-var resultScadaStr = JsonConvert.SerializeObject(resultScada);
+//var resultScadaStr = JsonConvert.SerializeObject(resultScada);
 
-Console.WriteLine("resultScada:" + resultScadaStr);
+//Console.WriteLine("resultScada:" + resultScadaStr); 
+#endregion
+
+
+Weather.WeatherWebServiceSoapClient webServiceSoapClient = new Weather.WeatherWebServiceSoapClient(EndpointConfiguration.WeatherWebServiceSoap);
+
+Console.Write("请输入：");
+string? input = Console.ReadLine();
+while(input != "q")
+{
+    if (string.IsNullOrEmpty(input))
+    {
+        return;
+    }
+    string[] str = new string[23];
+
+    str = await webServiceSoapClient.getWeatherbyCityNameAsync(input);
+
+    if (str[8] == "")
+    {
+        Console.WriteLine("暂不支持你要查询的城市");
+    }
+    //Console.WriteLine("s[8]:" + s[8]);
+
+    //Console.WriteLine("s[1] + s[6]:" + s[1] + " " + s[6]);
+
+    //Console.WriteLine("s[10]: " + s[10]);
+    string result = string.Join(",", str);
+
+    Console.WriteLine(result);
+
+    Console.WriteLine();
+
+    Console.Write("请输入：");
+    input = Console.ReadLine();
+}
